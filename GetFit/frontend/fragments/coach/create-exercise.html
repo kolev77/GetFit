@@ -1,0 +1,61 @@
+<div class="mt-5 welcome-text">
+    <h1 class="text-center">Welcome coach !</h1>
+    <h2 class="text-center">Your profile</h2>
+
+    <form enctype="multipart/form-data" id="regForm">
+        <div class="form-group exercise-form">
+            <label for="name">Exercise name</label>
+            <input type="text" class="form-control" id="name" name="name">
+        </div>
+
+        <div class="form-group exercise-form">
+            <label for="description">Description</label>
+            <textarea name="description" form="regForm" id="description" rows="5" resi></textarea>
+        </div>
+
+        <div class="form-group exercise-form">
+            <label for="exerciseDifficulty" class="exerciseDifficulty">Exercise difficulty</label>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="exerciseDifficulty">
+                <label class="btn exerciseDiff btn-secondary active">
+                    <input type="radio" name="options"  autocomplete="off" value="Basic"> Basic
+                </label>
+                <label class="btn exerciseDiff btn-secondary">
+                    <input type="radio" name="options"  autocomplete="off" value="Intermediate"> Intermediate
+                </label>
+                <label class="btn exerciseDiff btn-secondary">
+                    <input type="radio" name="options"  autocomplete="off" value="Advanced"> Advanced
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group exercise-form">
+            <label for="muscleGroup" class="muscleGroup">Muscle group</label>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="muscleGroup">
+                <label class="btn btn-secondary muscleGr active">
+                    <input type="radio" name="options" autocomplete="off" value="Chest"> Chest
+                </label>
+                <label class="btn btn-secondary muscleGr">
+                    <input type="radio" name="options" autocomplete="off" value="Arms"> Arms
+                </label>
+                <label class="btn btn-secondary muscleGr">
+                    <input type="radio" name="options" autocomplete="off" value="Shoulders"> Shoulders
+                </label>
+                <label class="btn btn-secondary muscleGr">
+                    <input type="radio" name="options" autocomplete="off" value="Legs"> Legs
+                </label>
+                <label class="btn btn-secondary muscleGr">
+                    <input type="radio" name="options" autocomplete="off" value="Calves"> Calves
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group exercise-form">
+            <label for="images">Images</label>
+            <input type="file" name="images" id="images" multiple>
+        </div>
+
+        <button id="createExerciseBtn" type="button" class="btn btn-primary createExerciseBtn">Create</button>
+
+    </form>
+
+</div>

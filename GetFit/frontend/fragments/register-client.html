@@ -1,0 +1,55 @@
+<h1 class="text-center mt-4">Register</h1>
+<div>
+    <div class="register-buttons">
+        <form method="get" action="#/client/register">
+            <button type="submit" class="btn custom-btn reg-client-btn activeRegBtn">AS CLIENT</button>
+        </form>
+        <form method="get" action="#/coach/register">
+            <button type="submit"  class="btn custom-btn reg-coach-btn">AS COACH</button>
+        </form>
+    </div>
+
+</div>
+<form enctype="multipart/form-data" id="regForm">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username">
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password">
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" class="form-control" id="email" name="email">
+    </div>
+
+    <div class="form-group">
+        <label for="phoneNumber">Phone number</label>
+        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber">
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description </label>
+        <textarea class="form-control" rows="5" cols="50" name="description" id="description"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="height">Height</label>
+        <input type="number" class="form-control" id="height" name="height">
+    </div>
+
+    <div class="form-group">
+        <label for="weight">Weight</label>
+        <input type="number" class="form-control" id="weight" name="weight">
+    </div>
+
+
+        <div class="form-group">
+            <label for="profilePicture">Profile picture</label>
+            <input type="file" class="form-control col-md-6" id="profilePicture" name="profilePicture">
+        </div>
+
+    <button id="register-button" type="button" class="btn btn-primary">Register</button>
+</form>

@@ -1,0 +1,192 @@
+.navbar-white {
+    background-color: black;
+}
+
+.nav-link-black {
+    color: whitesmoke;
+}
+
+.nav-link-black:hover {
+    color: #5cb3fd;
+}
+
+.nav-link-black:focus {
+    color: #090909;
+}
+
+.dropdown-toggle::after {
+    display: none
+}
+
+.table {
+    border-radius: 5px;
+    width: 80%;
+    margin: 0 auto;
+    float: none;
+}
+
+footer {
+    padding-bottom: 3vh;
+    width: 100%;
+    text-align: center;
+}
+
+.client-container {
+    background: black;
+    color: ghostwhite;
+    padding: 0px 0px 10px 0px;
+    margin: 4%;
+    box-shadow: 1px -4px 56px -7px rgba(242,233,242,0.81);
+    border-radius: 13%;
+
+}
+
+.client-container:hover {
+    background: black;
+    color: ghostwhite;
+    padding: 0px 0px 10px 0px;
+    margin: 4%;
+    box-shadow: 1px -4px 56px -7px rgba(88,202,244,0.9);
+    border-radius: 13%;
+
+}
+
+.client-container p {
+    color: rgb(88,202,244);
+    display: inline;
+}
+
+.clients {
+    /*display: flex;*/
+}
+
+body {
+    background: black;
+}
+
+.welcome{
+    color: whitesmoke;
+    margin-bottom: 10px;
+}
+.form-group label{
+    color: whitesmoke;
+}
+
+.slider-image {
+    width: 80%;
+    height: 70%;
+    opacity: 0.8;
+    margin-left: 15%;
+    border-radius: 15%;
+}
+.register-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+
+}
+
+.custom-btn{
+    opacity: 0.8;
+    font-size: 1.3em;
+    font-weight: bolder;
+    background: black;
+    border-radius: 7%;
+    padding: 10px;
+    border: 1px groove whitesmoke;
+    color: white;
+    margin-left: 20px;
+}
+
+.profilePicture{
+    border-top-right-radius: 13%;
+    border-top-left-radius: 13%;
+    height: 188px;
+    width: 100%;
+}
+
+.myProfilePicture{
+    border-top-right-radius: 13%;
+    border-top-left-radius: 13%;
+    height: 276px;
+    width: 100%;
+}
+.myProfile{
+    display: flex;
+}
+
+.welcome-text{
+    color: whitesmoke;
+    padding-top: 20px;
+}
+
+.details-link{
+    /*display: table-row;*/
+}
+.user-data{
+    margin-left: 9%;
+}
+.profile-ico{
+    height: 28px;
+    margin-right: 5px;
+}
+.myProfile .client-container{
+    float: none;
+    margin: 0 auto;
+}
+
+.activeRegBtn {
+    box-shadow: 1px -4px 56px 6px rgba(88,202,244,0.9);
+}
+
+.myCoaches{
+    padding-top: 10px;
+}
+hr{
+    width: 100%;
+    border-bottom: 6px solid rgb(88,202,244);
+    border-radius: 11px;
+}
+
+.exercise-form{
+    display: block;
+}
+.exercise-label{
+    width: 100%;
+}
+
+#description{
+    width: 100%;
+    overflow-y: scroll;
+    resize: none;
+}
+
+#exerciseDifficulty{
+    margin: auto;
+    width: 50%;
+}
+
+.diff-button{
+    color: #292b2c;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+
+.diff-button.active{
+    color: whitesmoke;
+    background-color: rgba(88,202,244,0.9);
+    border-color: whitesmoke;
+}
+
+.exerciseDifficulty{
+    width: 100%;
+}
+
+#muscleGroup{
+    width: 100%;
+}
+
+#images{
+    width: 100%;
+}
