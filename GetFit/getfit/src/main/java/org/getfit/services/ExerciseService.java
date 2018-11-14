@@ -4,6 +4,8 @@ import org.getfit.models.bindingModels.RegisterExerciseBindingModel;
 import org.getfit.models.viewModels.ExerciseViewModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface ExerciseService extends UserDetailsService {
     boolean exerciseExists(String name);
 
@@ -12,4 +14,6 @@ public interface ExerciseService extends UserDetailsService {
     ExerciseViewModel getExerciseById(String id);
 
     ExerciseViewModel getExerciseByName(String name);
+
+    List<ExerciseViewModel> getAllExercises();
 }

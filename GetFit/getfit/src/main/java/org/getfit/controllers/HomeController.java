@@ -2,8 +2,10 @@ package org.getfit.controllers;
 
 import com.google.gson.Gson;
 import org.getfit.cloud.CloudImageExtractor;
+import org.getfit.models.viewModels.ExerciseViewModel;
 import org.getfit.services.ClientService;
 import org.getfit.services.CoachService;
+import org.getfit.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.core.Authentication;
@@ -21,13 +23,15 @@ public class HomeController {
     private final String ROLE_CLIENT = "ROLE_CLIENT";
     private final ClientService clientService;
     private final CoachService coachService;
+    private final ExerciseService exerciseService;
     private final Gson gson;
     private final CloudImageExtractor cloudImageExtractor;
 
     @Autowired
-    public HomeController(ClientService clientService, CoachService coachService, Gson gson, CloudImageExtractor cloudImageExtractor) {
+    public HomeController(ClientService clientService, CoachService coachService, ExerciseService exerciseService, Gson gson, CloudImageExtractor cloudImageExtractor) {
         this.clientService = clientService;
         this.coachService = coachService;
+        this.exerciseService = exerciseService;
         this.gson = gson;
         this.cloudImageExtractor = cloudImageExtractor;
     }
@@ -38,8 +42,6 @@ public class HomeController {
     public @ResponseBody
     String[] home(Principal principal) throws IOException {
         String[] result = new String[5];
-
-
 
         List<?> all = null;
         String role = ((Authentication) principal).getAuthorities().toArray()[0].toString();
@@ -55,6 +57,17 @@ public class HomeController {
         result[0] = this.gson.toJson(all);
         result[1] = "[{\"role\":\"" + role + "\"}]";
         result[2] = this.gson.toJson(this.cloudImageExtractor.getAllImages(principal.getName()));
+        return result;
+    }
+
+    @GetMapping(value = "/exercises", produces = "application/json")
+    @CachePut("result")
+    public @ResponseBody
+    String[] allExercises(Principal principal) throws IOException {
+        String[] result = new String[2];
+        List<ExerciseViewModel> allExercises = this.exerciseService.getAllExercises();
+        result[0] = this.gson.toJson(allExercises);
+        result[1] = this.gson.toJson(this.cloudImageExtractor.getAllImages(principal.getName()));
 
         return result;
     }

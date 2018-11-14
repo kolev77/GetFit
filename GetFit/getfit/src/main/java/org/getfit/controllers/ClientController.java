@@ -50,7 +50,6 @@ public class ClientController {
         this.modelMapper = modelMapper;
     }
 
-    //    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @RequestMapping(value = "/register", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
     public ResponseEntity<?> register(MultipartHttpServletRequest request) throws IOException {
         MultipartFile profilePicture = request.getFile("profilePicture");

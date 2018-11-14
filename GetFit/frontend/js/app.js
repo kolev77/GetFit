@@ -626,4 +626,24 @@ app.router.on("#/coach/create-exercise", null, function () {
 
 });
 
+app.router.on("#/exercises", null, function () {
+        $.ajax({
+            type: 'GET',
+            headers: {
+                'Authorization': app.authorizationService.getAuth()
+            },
+            url: constants.serviceUrl + '/exercises',
+            success: function (data) {
+                let exercises = JSON.parse(data[0]);
+                let exercisesPictures = JSON.parse(data[1]);
+
+                for (let exercise of exercises) {
+                    let photos = exercise['photosInfo'];
+
+
+                }
+            }
+        });
+    }
+);
 window.location.href = '#/';

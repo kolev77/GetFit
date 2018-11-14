@@ -1,7 +1,7 @@
 package org.getfit.models.viewModels;
 
 public class ExerciseViewModel {
-    private String name;
+    private String exerciseName;
 
     private String creatorName;
 
@@ -13,12 +13,12 @@ public class ExerciseViewModel {
 
     private String photosInfo;
 
-    public String getName() {
-        return name;
+    public String getExerciseName() {
+        return exerciseName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
     }
 
     public String getCreatorName() {

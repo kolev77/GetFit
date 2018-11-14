@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
     private final ExerciseRepository exerciseRepository;
@@ -43,6 +46,18 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public ExerciseViewModel getExerciseByName(String name) {
         return null;
+    }
+
+    @Override
+    public List<ExerciseViewModel> getAllExercises() {
+        List<Exercise> all = this.exerciseRepository.findAll();
+        List<ExerciseViewModel> exerciseViewModels = new ArrayList<>();
+
+        for (Exercise exercise : all) {
+            ExerciseViewModel viewModel = modelMapper.map(exercise,ExerciseViewModel.class);
+            exerciseViewModels.add(viewModel);
+        }
+        return exerciseViewModels;
     }
 
     @Override
