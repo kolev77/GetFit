@@ -1,2 +1,0 @@
-# GetFit
-Personal project
