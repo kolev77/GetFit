@@ -623,55 +623,55 @@ app.router.on("#/coach/create-exercise", null, function () {
 });
 
 app.router.on("#/exercises/all", null, function () {
-        $.ajax({
-            type: 'GET',
-            headers: {
-                'Authorization': app.authorizationService.getAuth()
-            },
-            url: constants.serviceUrl + '/exercises/all',
-            success: function (data) {
-                let exercises = JSON.parse(data[0]);
-                let exercisesPhotos = JSON.parse(data[1]);
-                allExercisesImages = exercisesPhotos;
+    $.ajax({
+        type: 'GET',
+        headers: {
+            'Authorization': app.authorizationService.getAuth()
+        },
+        url: constants.serviceUrl + '/exercises/all',
+        success: function (data) {
+            let exercises = JSON.parse(data[0]);
+            let exercisesPhotos = JSON.parse(data[1]);
+            allExercisesImages = exercisesPhotos;
 
-                app.templateLoader.loadTemplate('.app', 'exercise/exercises-all', function () {
+            app.templateLoader.loadTemplate('.app', 'exercise/exercises-all', function () {
 
-                    $('.exercises').append('<div class="row exercises-row">');
-                    for (let exercise of exercises) {
-                        let regex = /\,"(.*?).jpg"/gm;
-                        let photoName = regex.exec(exercise['photosInfo'])[1] + '.jpg';
+                $('.exercises').append('<div class="row exercises-row">');
+                for (let exercise of exercises) {
+                    let regex = /\,"(.*?).jpg"/gm;
+                    let photoName = regex.exec(exercise['photosInfo'])[1] + '.jpg';
 
-                        let imageUrl = allUserImages.filter(i => i[0] == photoName)[0][1];
+                    let imageUrl = allUserImages.filter(i => i[0] == photoName)[0][1];
 
-                        $('.exercises-row').append(
-                            '<div class="col-md-2 client-container">'
-                            + '<a class="details-link" href="#/exercises/details?exercisename=' + exercise['exerciseName'] + '">'
-                            + '<div>'
-                            + '<img src="' + imageUrl + '" class="profilePicture">'
-                            + '</div>'
-                            + '<div class="user-data">'
-                            + '<img src="assets/user.png" class="profile-ico">'
-                            + '<p>' + exercise['exerciseName'] + '</p>'
-                            + '</div>'
-                            + '<div class="user-data mt-2">'
-                            + '<img src="assets/phone.png" class="profile-ico">'
-                            + '<p>' + exercise['levelOfDifficulty'] + '</p>'
-                            + '</div>'
-                            + '<div class="user-data mt-2">'
-                            + '<img src="assets/phone.png" class="profile-ico">'
-                            + '<p>' + exercise['muscleGroup'] + '</p>'
-                            + '</div>'
-                            + '</div>'
-                            + '</a>');
-                    }
+                    $('.exercises-row').append(
+                        '<div class="col-md-2 client-container">'
+                        + '<a class="details-link" href="#/exercises/details?exercisename=' + exercise['exerciseName'] + '">'
+                        + '<div>'
+                        + '<img src="' + imageUrl + '" class="profilePicture">'
+                        + '</div>'
+                        + '<div class="user-data">'
+                        + '<img src="assets/user.png" class="profile-ico">'
+                        + '<p>' + exercise['exerciseName'] + '</p>'
+                        + '</div>'
+                        + '<div class="user-data mt-2">'
+                        + '<img src="assets/phone.png" class="profile-ico">'
+                        + '<p>' + exercise['levelOfDifficulty'] + '</p>'
+                        + '</div>'
+                        + '<div class="user-data mt-2">'
+                        + '<img src="assets/phone.png" class="profile-ico">'
+                        + '<p>' + exercise['muscleGroup'] + '</p>'
+                        + '</div>'
+                        + '</div>'
+                        + '</a>');
+                }
 
-                    $('.exercises').append('</div>');
+                $('.exercises').append('</div>');
 
-                });
-            }
-        })
-        ;
-    });
+            });
+        }
+    })
+    ;
+});
 
 app.router.on('#/exercises/details', ['exercisename'], function (exercisename) {
     if (!app.authorizationService.isAuthorized()) {
@@ -686,31 +686,33 @@ app.router.on('#/exercises/details', ['exercisename'], function (exercisename) {
         url: constants.serviceUrl + '/exercises/details?exercisename=' + exercisename,
         success: function (data) {
             console.log(data);
-            let photos = JSON.parse(data['photosInfo']);
+            let photos = Object.keys(JSON.parse(data['photosInfo']));
             let exerciseName = data['exerciseName'];
             let creatorName = data['creatorName'];
             let description = data['description'];
             let levelOfDifficulty = data['levelOfDifficulty'];
             let muscleGroup = data['muscleGroup'];
 
-            // console.log(photos);
-            // console.log(exerciseName);
-            // console.log(creatorName);
-            // console.log(description);
-            // console.log(levelOfDifficulty);
-               // console.log(muscleGroup);
-           console.log(Object.keys(photos));
+            //TODO : finish the slider and go to sleep
 
-           //TODO : finish the slider and go to sleep
+            app.templateLoader.loadTemplate('.app', 'exercise/exercise-details', function () {
+                let i = 0;
+                for (let photo of photos) {
+                    let photoUrl = allExercisesImages.filter(i => i[0] === photo)[0][1];
+                    if (i == 0) {
+                        $('.exercise-slider-image')
+                            .append('<div class="carousel-item active">'
+                                + '<img class="d-block" src="' + photoUrl + '">'
+                                + '</div>');
+                    } else {
+                        $('.exercise-slider-image')
+                            .append('<div class="carousel-item">'
+                                + '<img class="d-block" src="' + photoUrl + '">'
+                                + '</div>');
+                    }
+                    i++;
+                }
 
-            app.templateLoader.loadTemplate('.app', 'exercises/exercise-details', function () {
-
-                $('.exercise-slider')
-                    .append('<div class="carousel-inner text-center ">'
-                        + '<div class="carousel-item active ">'
-                        + '<img class="d-block slider-image" src="' + +'" alt="First slide">'
-                        + '</div>\n'
-                        + '</div>');
             });
         }
     });
