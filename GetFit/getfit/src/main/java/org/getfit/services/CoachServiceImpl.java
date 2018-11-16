@@ -35,13 +35,14 @@ public class CoachServiceImpl implements CoachService {
 
     @Override
     public boolean save(RegisterCoachBindingModel coachBindingModel) {
-        String userId = this.coachRepository.findByUsername(coachBindingModel.getUsername()).getId();
-        if (this.coachRepository.existsById(userId)) {
+
+        try {
+            String userId = this.coachRepository.findByUsername(coachBindingModel.getUsername()).getId();
             Coach userToUpdate = this.coachRepository.getOne(userId);
             userToUpdate.setClients(coachBindingModel.getClients());
 
             Coach save = this.coachRepository.saveAndFlush(userToUpdate);
-        } else {
+        } catch (Exception e) {
             Coach coach = this.modelMapper.map(coachBindingModel, Coach.class);
 
             coach.setPassword(this.bCryptPasswordEncoder.encode(coachBindingModel.getPassword()));
@@ -74,6 +75,7 @@ public class CoachServiceImpl implements CoachService {
         for (Coach coach : all) {
             CoachViewModel viewModel = modelMapper.map(coach, CoachViewModel.class);
             coach.getClients().forEach(c -> viewModel.getClientsNames().add(c.getUsername()));
+            viewModel.setSubscribers(coach.getSubscribers());
             result.add(viewModel);
         }
 
@@ -86,7 +88,6 @@ public class CoachServiceImpl implements CoachService {
 
         return this.modelMapper.map(coach, CoachViewModel.class);
     }
-
 
 
     @Override

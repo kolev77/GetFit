@@ -23,6 +23,7 @@ public class Coach extends User {
             inverseJoinColumns = @JoinColumn(name = "client_id"))
     @JsonIgnoreProperties("coaches")
     private List<Client> clients;
+
     // rating
 
     public Coach() {
@@ -70,4 +71,9 @@ public class Coach extends User {
     public void setClients(List<Client> clients) {
         this.clients = clients;
     }
+
+    public int getSubscribers() {
+        return this.getClients().size();
+    }
+
 }

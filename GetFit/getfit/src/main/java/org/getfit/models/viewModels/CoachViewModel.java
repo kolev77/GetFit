@@ -4,15 +4,7 @@ package org.getfit.models.viewModels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoachViewModel {
-
-    private String username;
-
-    private String email;
-
-    private String phoneNumber;
-
-    private String description;
+public class CoachViewModel extends UserViewModel {
 
     private String certificates;
 
@@ -22,42 +14,10 @@ public class CoachViewModel {
 
     private List<String> clientsNames;
 
+    private Integer subscribers;
 
     public CoachViewModel() {
         this.clientsNames = new ArrayList<>();
-    }
-
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getCertificates() {
@@ -90,5 +50,13 @@ public class CoachViewModel {
 
     public void setClientsNames(List<String> clientsNames) {
         this.clientsNames = clientsNames;
+    }
+
+    public Integer getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(Integer subscribers) {
+        this.subscribers = subscribers;
     }
 }

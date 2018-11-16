@@ -27,6 +27,8 @@ public class RegisterClientBindingModel {
 
     private List<Coach> coaches;
 
+    private int subscribers;
+
 
     public RegisterClientBindingModel() {
         coaches = new ArrayList<>();

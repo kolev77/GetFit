@@ -2,7 +2,6 @@ package org.getfit.controllers;
 
 import com.google.gson.Gson;
 import org.getfit.cloud.CloudImageExtractor;
-import org.getfit.models.viewModels.ExerciseViewModel;
 import org.getfit.services.ClientService;
 import org.getfit.services.CoachService;
 import org.getfit.services.ExerciseService;
@@ -48,27 +47,17 @@ public class HomeController {
 
         if (role.equals(ROLE_COACH)) {
             all = this.clientService.findAll();
+
             result[3] = this.coachService.getCoachByUsername(principal.getName().toString()).getProfilePictureFileName();
         } else if (role.equals(ROLE_CLIENT)) {
             all = this.coachService.findAll();
             result[3] = this.clientService.getClientByUsername(principal.getName().toString()).getProfilePictureFileName();
         }
 
+
         result[0] = this.gson.toJson(all);
         result[1] = "[{\"role\":\"" + role + "\"}]";
         result[2] = this.gson.toJson(this.cloudImageExtractor.getAllImages(principal.getName()));
-        return result;
-    }
-
-    @GetMapping(value = "/exercises", produces = "application/json")
-    @CachePut("result")
-    public @ResponseBody
-    String[] allExercises(Principal principal) throws IOException {
-        String[] result = new String[2];
-        List<ExerciseViewModel> allExercises = this.exerciseService.getAllExercises();
-        result[0] = this.gson.toJson(allExercises);
-        result[1] = this.gson.toJson(this.cloudImageExtractor.getAllImages(principal.getName()));
-
         return result;
     }
 

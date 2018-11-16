@@ -52,12 +52,16 @@ public class CloudImageExtractor {
 
     @CachePut("images")
     public List<String[]> getAllImages(String name) throws IOException {
-        if (usersCloudData.get(name) != null) {
-            return usersCloudData.get(name);
-        }
         ArrayList<Map<String, Object>> filesData = getFiles();
 
+        // check if there are new images(userImages - > new userImg = new USER),
+        // if there are, we are doing foreach and extract the useful data.
+        if (usersCloudData.get(name) != null && filesData.size() == usersCloudData.get(name).size()) {
+            return usersCloudData.get(name);
+        }
+
         List<String[]> resultImages = new ArrayList<>();
+
 
         for (Map<String, Object> singleFileData : filesData) {
             String fileId = singleFileData.get("id").toString().substring(1);
@@ -92,9 +96,10 @@ public class CloudImageExtractor {
             imageData[0] = singleFileData.get("name").toString();
             imageData[1] = "https://" + host + filePath;
 
-
             resultImages.add(imageData);
         }
+
+
         usersCloudData.put(name, resultImages);
         return resultImages;
     }
@@ -121,5 +126,7 @@ public class CloudImageExtractor {
 
 
     }
+
+//    public List<String[]> get
 
 }

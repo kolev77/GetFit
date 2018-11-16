@@ -92,11 +92,12 @@ body {
     font-size: 1.3em;
     font-weight: bolder;
     background: black;
-    border-radius: 7%;
+    border-radius: 9px;
     padding: 10px;
     border: 1px groove whitesmoke;
     color: white;
     margin-left: 20px;
+    margin-bottom: 10px;
 }
 
 .profilePicture{
@@ -193,4 +194,35 @@ hr{
 
 .regForm{
     margin: auto;
+}
+
+.regForm .custom-btn{
+    width: 100%;
+    margin: 10px 0 0 0;
+    border-radius: 6px;
+}
+.custom-header{
+    color: whitesmoke;
+}
+
+.guest-reg-btns{
+    padding-bottom: 10px;
+    width: 54%;
+    margin: auto;
+    border-radius: 93px;
+    box-shadow: 1px -4px 56px 6px #eceeef47;
+}
+
+.custom-label{
+    opacity: 0.8;
+    font-weight: bolder;
+    background: black;
+    border-radius: 9px;
+    border: 1px groove whitesmoke;
+    color: white;
+    padding: 3% 2% 4% 2%;
+}
+
+#muscleGroup{
+    display: block;
 }

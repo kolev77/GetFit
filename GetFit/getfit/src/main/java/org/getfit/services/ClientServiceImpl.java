@@ -52,6 +52,7 @@ public class ClientServiceImpl implements ClientService {
         return true;
     }
 
+
     @Override
     public ClientViewModel getClientViewByUsername(String username) {
         Client client = this.clientRepository.findByUsername(username);

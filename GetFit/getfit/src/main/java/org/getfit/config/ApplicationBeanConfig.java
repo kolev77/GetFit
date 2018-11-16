@@ -37,12 +37,4 @@ public class ApplicationBeanConfig {
         multipartResolver.setMaxUploadSize(5242880);
         return multipartResolver;
     }
-
-
-//    @Bean
-//    public MultipartResolver multipartResolver() {
-//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//        multipartResolver.setMaxUploadSize(1000000);
-//        return multipartResolver;
-//    }
 }

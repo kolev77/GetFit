@@ -45,7 +45,9 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public ExerciseViewModel getExerciseByName(String name) {
-        return null;
+        Exercise byExerciseName = this.exerciseRepository.findByExerciseName(name);
+
+        return this.modelMapper.map(byExerciseName,ExerciseViewModel.class);
     }
 
     @Override

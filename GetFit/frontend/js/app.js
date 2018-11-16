@@ -21,8 +21,10 @@ app.router.on("#/", null, function () {
         );
     })
     ;
-})
-;
+});
+let allUserImages;
+
+let allExercisesImages;
 
 app.router.on("#/coach/profile", null, function () {
     if (!app.authorizationService.isAuthorized()) {
@@ -179,6 +181,7 @@ function addCoach(ev) {
         processData: false,
         contentType: "application/json",
         success: function () {
+            localStorage.removeItem("coachName");
             app.router.redirect('#/');
         }
     });
@@ -197,11 +200,8 @@ app.router.on('#/client/details', ['username'], function (username) {
         url: constants.serviceUrl + '/client/details?username=' + username,
         success: function (data) {
 
-            console.log(data);
 
-            localStorage.setItem("coachName", data['username']);
-
-            let imgUrl = localStorage.getItem(data['profilePictureFileName']);
+            let imgUrl = allUserImages.filter(i => i[0] == data['profilePictureFileName'])[0][1];
 
             app.templateLoader.loadTemplate('.app', 'client/client-details', function () {
 
@@ -249,7 +249,7 @@ app.router.on('#/coach/details', ['username'], function (username) {
         success: function (data) {
             localStorage.setItem("coachName", data['username']);
 
-            let imgUrl = localStorage.getItem(data['profilePictureFileName']);
+            let imgUrl = allUserImages.filter(i => i[0] == data['profilePictureFileName'])[0][1];
 
             app.templateLoader.loadTemplate('.app', 'coach/coach-details', function () {
 
@@ -278,8 +278,6 @@ app.router.on('#/coach/details', ['username'], function (username) {
                     + '</div>'
                     + '</a>');
 
-                console.log(data);
-                console.log(data['clientsNames']);
 
                 if (data['clientsNames'].indexOf(localStorage.getItem("username")) < 0) {
 
@@ -315,7 +313,9 @@ app.router.on("#/home", null, function () {
             let role = JSON.parse(data[1])[0]['role'];
             let images = JSON.parse(data[2]);
             let loggedUserPictureId = data[3];
-            localStorage.setItem("profilePictureUrl", images.filter(i => i[0] == data[3])[0][1]);
+            allUserImages = images;
+
+            localStorage.setItem("profilePictureUrl", allUserImages.filter(i => i[0] == data[3])[0][1]);
             localStorage.setItem("r", role);
 
             if (role == "ROLE_COACH") {
@@ -323,7 +323,7 @@ app.router.on("#/home", null, function () {
 
                     $('.clients').append('<div class="row clients-row">');
                     for (let client of users) {
-                        let imageUrl = images.filter(i => i[0] == client['profilePictureFileName'])[0][1];
+                        let imageUrl = allUserImages.filter(i => i[0] == client['profilePictureFileName'])[0][1];
 
                         $('.clients-row ').append(
                             '<div class="col-md-2 client-container">'
@@ -351,7 +351,7 @@ app.router.on("#/home", null, function () {
 
                     $('.coaches').append('<div class="row coaches-row">');
                     for (let coach of users) {
-                        let imageUrl = images.filter(i => i[0] == coach['profilePictureFileName'])[0][1];
+                        let imageUrl = allUserImages.filter(i => i[0] == coach['profilePictureFileName'])[0][1];
 
                         $('.coaches-row ').append(
                             '<div class="col-md-2 client-container">'
@@ -367,18 +367,15 @@ app.router.on("#/home", null, function () {
                             + '<img src="assets/phone.png" class="profile-ico">'
                             + '<p>' + coach['phoneNumber'] + '</p>'
                             + '</div>'
+                            + '<div class="user-data mt-2">'
+                            + '<p>' + coach['subscribers'] + '</p>'
+                            + '</div>'
                             + '</div>'
                             + '</a>'
                             + '</div>');
                     }
                     $('.coaches').append('</div>');
                 });
-            }
-        },
-        complete: function (data) {
-            let imagesInfo = JSON.parse(data['responseJSON'][2]);  // index 0 - pictureName, index1 - pictureUrl
-            for (let imgInfo of imagesInfo) {
-                localStorage.setItem(imgInfo[0], imgInfo[1]);
             }
         },
         error: function (xhr) {
@@ -401,6 +398,7 @@ app.router.on("#/login", null, function () {
             let username = $('#username').val();
             let password = $('#password').val();
 
+            localStorage.setItem("username", username);
             $.ajax({
                 type: 'POST',
                 url: 'http://localhost:8000/login',
@@ -412,12 +410,13 @@ app.router.on("#/login", null, function () {
                     "password": password
                 })
             }).done(function (body) {
-                localStorage.setItem("username", username);
+
                 let auth = body["Authorization"];
                 app.authorizationService.setAuth(auth);
                 app.router.redirect('#/home');
 
             }).fail(function (xhr, status, error) {
+                localStorage.clear();
                 new Noty({
                     text: 'ERROR: There was an error with your login.',
                     layout: 'topCenter',
@@ -566,7 +565,6 @@ app.router.on("#/coach/register", null, function () {
     });
 });
 
-
 app.router.on("#/coach/create-exercise", null, function () {
     if (!app.authorizationService.isAuthorized()) {
         app.router.redirect('#/home');
@@ -592,8 +590,6 @@ app.router.on("#/coach/create-exercise", null, function () {
                 images = $('#images')[0]['files'];
             }
 
-            console.log(images);
-
             let exerciseJson = JSON.stringify({
                 "exerciseName": exerciseName,
                 "creatorName": creatorName,
@@ -614,10 +610,10 @@ app.router.on("#/coach/create-exercise", null, function () {
                 data: exerciseData,
                 cache: false,
                 processData: false,
-                contentType: false
-                // success: function (data) {
-                //     app.router.redirect('#/login')
-                // }
+                contentType: false,
+                success: function (data) {
+                    app.router.redirect('#/login')
+                }
             });
 
 
@@ -626,24 +622,99 @@ app.router.on("#/coach/create-exercise", null, function () {
 
 });
 
-app.router.on("#/exercises", null, function () {
+app.router.on("#/exercises/all", null, function () {
         $.ajax({
             type: 'GET',
             headers: {
                 'Authorization': app.authorizationService.getAuth()
             },
-            url: constants.serviceUrl + '/exercises',
+            url: constants.serviceUrl + '/exercises/all',
             success: function (data) {
                 let exercises = JSON.parse(data[0]);
-                let exercisesPictures = JSON.parse(data[1]);
+                let exercisesPhotos = JSON.parse(data[1]);
+                allExercisesImages = exercisesPhotos;
 
-                for (let exercise of exercises) {
-                    let photos = exercise['photosInfo'];
+                app.templateLoader.loadTemplate('.app', 'exercise/exercises-all', function () {
 
+                    $('.exercises').append('<div class="row exercises-row">');
+                    for (let exercise of exercises) {
+                        let regex = /\,"(.*?).jpg"/gm;
+                        let photoName = regex.exec(exercise['photosInfo'])[1] + '.jpg';
 
-                }
+                        let imageUrl = allUserImages.filter(i => i[0] == photoName)[0][1];
+
+                        $('.exercises-row').append(
+                            '<div class="col-md-2 client-container">'
+                            + '<a class="details-link" href="#/exercises/details?exercisename=' + exercise['exerciseName'] + '">'
+                            + '<div>'
+                            + '<img src="' + imageUrl + '" class="profilePicture">'
+                            + '</div>'
+                            + '<div class="user-data">'
+                            + '<img src="assets/user.png" class="profile-ico">'
+                            + '<p>' + exercise['exerciseName'] + '</p>'
+                            + '</div>'
+                            + '<div class="user-data mt-2">'
+                            + '<img src="assets/phone.png" class="profile-ico">'
+                            + '<p>' + exercise['levelOfDifficulty'] + '</p>'
+                            + '</div>'
+                            + '<div class="user-data mt-2">'
+                            + '<img src="assets/phone.png" class="profile-ico">'
+                            + '<p>' + exercise['muscleGroup'] + '</p>'
+                            + '</div>'
+                            + '</div>'
+                            + '</a>');
+                    }
+
+                    $('.exercises').append('</div>');
+
+                });
             }
-        });
+        })
+        ;
+    });
+
+app.router.on('#/exercises/details', ['exercisename'], function (exercisename) {
+    if (!app.authorizationService.isAuthorized()) {
+        app.router.redirect('#/');
+        return;
     }
-);
+    $.ajax({
+        type: 'GET',
+        headers: {
+            'Authorization': app.authorizationService.getAuth()
+        },
+        url: constants.serviceUrl + '/exercises/details?exercisename=' + exercisename,
+        success: function (data) {
+            console.log(data);
+            let photos = JSON.parse(data['photosInfo']);
+            let exerciseName = data['exerciseName'];
+            let creatorName = data['creatorName'];
+            let description = data['description'];
+            let levelOfDifficulty = data['levelOfDifficulty'];
+            let muscleGroup = data['muscleGroup'];
+
+            // console.log(photos);
+            // console.log(exerciseName);
+            // console.log(creatorName);
+            // console.log(description);
+            // console.log(levelOfDifficulty);
+               // console.log(muscleGroup);
+           console.log(Object.keys(photos));
+
+           //TODO : finish the slider and go to sleep
+
+            app.templateLoader.loadTemplate('.app', 'exercises/exercise-details', function () {
+
+                $('.exercise-slider')
+                    .append('<div class="carousel-inner text-center ">'
+                        + '<div class="carousel-item active ">'
+                        + '<img class="d-block slider-image" src="' + +'" alt="First slide">'
+                        + '</div>\n'
+                        + '</div>');
+            });
+        }
+    });
+});
+
+
 window.location.href = '#/';

@@ -110,6 +110,7 @@ public class ClientController {
         RegisterCoachBindingModel coachBindingModel = modelMapper.map(coach, RegisterCoachBindingModel.class);
 
         clientService.save(clientBindingModel);
+
         coachService.save(coachBindingModel);
 
         return new ResponseEntity<>("Successfully added coach.", HttpStatus.OK);
