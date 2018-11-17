@@ -126,13 +126,14 @@ app.router.on("#/client/profile", null, function () {
                     + '</div>'
                     + '</div>');
 
+                console.log(allUserImages);
+
                 if (coachData.length > 0) {
                     $('.myCoaches').append('<h1 class="text-center">Your coaches : </h1>');
                     $('.myCoaches').append('<hr/>');
                     $('.myCoaches').append('<div class="row coaches-row">');
                     for (let coach of coachData) {
-                        let coachPicture = localStorage.getItem(coach['profilePictureFileName']);
-
+                        let coachPicture = allUserImages.filter(i => i[0] == coach['profilePictureFileName'])[0][1];
                         $('.coaches-row ').append(
                             '<div class="col-md-2 client-container">'
                             + '<a class="details-link" href="#/coach/details?username=' + coach['username'] + '">'
@@ -685,7 +686,6 @@ app.router.on('#/exercises/details', ['exercisename'], function (exercisename) {
         },
         url: constants.serviceUrl + '/exercises/details?exercisename=' + exercisename,
         success: function (data) {
-            console.log(data);
             let photos = Object.keys(JSON.parse(data['photosInfo']));
             let exerciseName = data['exerciseName'];
             let creatorName = data['creatorName'];
@@ -696,22 +696,29 @@ app.router.on('#/exercises/details', ['exercisename'], function (exercisename) {
             //TODO : finish the slider and go to sleep
 
             app.templateLoader.loadTemplate('.app', 'exercise/exercise-details', function () {
+                $('.custom-header').text(exerciseName);
+
+
                 let i = 0;
                 for (let photo of photos) {
                     let photoUrl = allExercisesImages.filter(i => i[0] === photo)[0][1];
                     if (i == 0) {
                         $('.exercise-slider-image')
                             .append('<div class="carousel-item active">'
-                                + '<img class="d-block" src="' + photoUrl + '">'
+                                + '<img class="d-block slider-image-ex" src="' + photoUrl + '">'
                                 + '</div>');
                     } else {
                         $('.exercise-slider-image')
                             .append('<div class="carousel-item">'
-                                + '<img class="d-block" src="' + photoUrl + '">'
+                                + '<img class="d-block slider-image-ex" src="' + photoUrl + '">'
                                 + '</div>');
                     }
                     i++;
                 }
+                $('.exercise-info').append('<h2>Muscle Group <p>' + muscleGroup + '</p> </h2>\n' +
+                    '<h2>Level of difficulty  <p>' + levelOfDifficulty + '</p></h2>\n' +
+                    '<h3>Description <p >' + description + '</p> </h3>' +
+                    '<h4>Creator name <p>' + creatorName + '</p></h4>');
 
             });
         }
