@@ -2,11 +2,10 @@ package org.getfit.services;
 
 import org.getfit.models.bindingModels.RegisterExerciseBindingModel;
 import org.getfit.models.viewModels.ExerciseViewModel;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface ExerciseService extends UserDetailsService {
+public interface ExerciseService {
     boolean exerciseExists(String name);
 
     boolean save(RegisterExerciseBindingModel exerciseBindingModel);
@@ -16,4 +15,6 @@ public interface ExerciseService extends UserDetailsService {
     ExerciseViewModel getExerciseByName(String name);
 
     List<ExerciseViewModel> getAllExercises();
+
+    List<ExerciseViewModel> getAllExercisesByMuscleGroup(String muscleGroup);
 }

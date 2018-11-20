@@ -5,8 +5,6 @@ import org.getfit.models.bindingModels.RegisterExerciseBindingModel;
 import org.getfit.models.viewModels.ExerciseViewModel;
 import org.getfit.repositories.ExerciseRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,9 +28,12 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public boolean save(RegisterExerciseBindingModel exerciseBindingModel) {
-        Exercise exercise = this.modelMapper.map(exerciseBindingModel,Exercise.class);
-        System.out.println(exercise);
-        System.out.println("test");
+        if (this.exerciseRepository.findByExerciseName(exerciseBindingModel.getExerciseName()) != null) {
+            return false;
+        }
+
+        Exercise exercise = this.modelMapper.map(exerciseBindingModel, Exercise.class);
+
 
         this.exerciseRepository.save(exercise);
         return true;
@@ -47,7 +48,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     public ExerciseViewModel getExerciseByName(String name) {
         Exercise byExerciseName = this.exerciseRepository.findByExerciseName(name);
 
-        return this.modelMapper.map(byExerciseName,ExerciseViewModel.class);
+        return this.modelMapper.map(byExerciseName, ExerciseViewModel.class);
     }
 
     @Override
@@ -56,14 +57,21 @@ public class ExerciseServiceImpl implements ExerciseService {
         List<ExerciseViewModel> exerciseViewModels = new ArrayList<>();
 
         for (Exercise exercise : all) {
-            ExerciseViewModel viewModel = modelMapper.map(exercise,ExerciseViewModel.class);
+            ExerciseViewModel viewModel = modelMapper.map(exercise, ExerciseViewModel.class);
             exerciseViewModels.add(viewModel);
         }
         return exerciseViewModels;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+    public List<ExerciseViewModel> getAllExercisesByMuscleGroup(String muscleGroup) {
+        List<Exercise> entities = this.exerciseRepository.getAllByMuscleGroup(muscleGroup);
+        List<ExerciseViewModel> exerciseViewModels = new ArrayList<>();
+
+        for (Exercise exercise : entities) {
+            ExerciseViewModel viewModel = modelMapper.map(exercise, ExerciseViewModel.class);
+            exerciseViewModels.add(viewModel);
+        }
+        return exerciseViewModels;
     }
 }

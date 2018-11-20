@@ -271,3 +271,9 @@ hr {
     margin: auto;
     width: 100%;
 }
+
+
+.training{
+    background: yellow;
+    border-radius: 20px;
+}

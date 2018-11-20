@@ -616,11 +616,79 @@ app.router.on("#/coach/create-exercise", null, function () {
                     app.router.redirect('#/login')
                 }
             });
-
-
         })
     });
 
+});
+
+app.router.on("#/program/create", null, function () {
+    if (!app.authorizationService.isAuthorized()) {
+        app.router.redirect('#/home');
+        return;
+    }
+
+    app.templateLoader.loadTemplate('.app', 'program/create-program', function () {
+        $('select').on('change', function () {
+            $('#trainings').empty();
+            let number = parseInt($('#numberOfTrainings option:selected').val());
+
+            $.ajax({
+                type: 'GET',
+                url: constants.serviceUrl + '/exercises/sorted-by-muscle-group',
+                success: function (exercisesByMuscleGroup) {
+                    let arms = exercisesByMuscleGroup['arms'];
+                    let shoulders = exercisesByMuscleGroup['shoulders'];
+                    let chest = exercisesByMuscleGroup['chest'];
+                    let back = exercisesByMuscleGroup['back'];
+                    let legs = exercisesByMuscleGroup['legs'];
+                    let calves = exercisesByMuscleGroup['calves'];
+
+                    for (let i = 0; i < number; i++) {
+                        $('#trainings')
+                            .append(' <div class="mt-5 training' + i + '">'
+                                + '</div>');
+
+                        app.templateLoader.loadTemplate('.training' + i, 'program/create-training', function () {
+                            $('.training'+i+'').append('<div class="form-group">'
+                                + '<label for="trainingName">Name</label>'
+                                + '<input type="text" class="form-control " id="trainingName" name="trainingName">'
+                                + '</div>');
+
+                            for (let e of arms) {
+                                $('.training' + i).find('.arms-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                            }
+
+                            for (let e of shoulders) {
+                                $('.training' + i).find('.shoulders-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                            }
+
+                            for (let e of chest) {
+                                $('.training' + i).find('.chest-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                            }
+
+                            for (let e of back) {
+                                $('.training' + i).find('.back-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                            }
+
+                            for (let e of legs) {
+                                $('.training' + i).find('.legs-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                            }
+
+                            for (let e of calves) {
+                                $('.training' + i).find('.calves-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                            }
+
+                        });
+
+                    }
+
+                }
+            });
+
+
+        });
+
+    });
 });
 
 app.router.on("#/exercises/all", null, function () {
