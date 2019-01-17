@@ -144,6 +144,9 @@ body {
 .user-data {
     margin-left: 9%;
 }
+.exercise-data {
+    margin-left: 9%;
+}
 
 .profile-ico {
     height: 28px;
@@ -276,4 +279,21 @@ hr {
 .training{
     background: yellow;
     border-radius: 20px;
+}
+
+.exercise-menu{
+    margin: 0;
+}
+
+#trainingName{
+    max-width: 478px;
+}
+.exerciseThumbnail{
+    border-top-right-radius: 13%;
+    border-top-left-radius: 13%;
+    height: 85px;
+    width: 100%;
+}
+.exercise-data.muscle-group{
+    display: none;
 }

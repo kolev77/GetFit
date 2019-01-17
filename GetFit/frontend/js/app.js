@@ -636,6 +636,7 @@ app.router.on("#/program/create", null, function () {
                 type: 'GET',
                 url: constants.serviceUrl + '/exercises/sorted-by-muscle-group',
                 success: function (exercisesByMuscleGroup) {
+
                     let arms = exercisesByMuscleGroup['arms'];
                     let shoulders = exercisesByMuscleGroup['shoulders'];
                     let chest = exercisesByMuscleGroup['chest'];
@@ -645,51 +646,96 @@ app.router.on("#/program/create", null, function () {
 
                     for (let i = 0; i < number; i++) {
                         $('#trainings')
-                            .append(' <div class="mt-5 training' + i + '">'
+                            .append(' <div class="mt-5 training-block training' + i + '">'
                                 + '</div>');
 
                         app.templateLoader.loadTemplate('.training' + i, 'program/create-training', function () {
-                            $('.training'+i+'').append('<div class="form-group">'
-                                + '<label for="trainingName">Name</label>'
-                                + '<input type="text" class="form-control " id="trainingName" name="trainingName">'
-                                + '</div>');
 
                             for (let e of arms) {
-                                $('.training' + i).find('.arms-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                                $('.training' + i).find('.arms-menu').append('<a class="dropdown-item " href="#">' + e.exerciseName + '</a>')
                             }
 
                             for (let e of shoulders) {
-                                $('.training' + i).find('.shoulders-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                                $('.training' + i).find('.shoulders-menu').append('<a class="dropdown-item " href="#">' + e.exerciseName + '</a>')
                             }
 
                             for (let e of chest) {
-                                $('.training' + i).find('.chest-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                                $('.training' + i).find('.chest-menu').append('<a class="dropdown-item " href="#">' + e.exerciseName + '</a>')
                             }
 
                             for (let e of back) {
-                                $('.training' + i).find('.back-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                                $('.training' + i).find('.back-menu').append('<a class="dropdown-item " href="#">' + e.exerciseName + '</a>')
                             }
 
                             for (let e of legs) {
-                                $('.training' + i).find('.legs-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                                $('.training' + i).find('.legs-menu').append('<a class="dropdown-item " href="">' + e.exerciseName + '</a>')
                             }
 
                             for (let e of calves) {
-                                $('.training' + i).find('.calves-menu').append('<a class="dropdown-item" href="#">' + e.exerciseName + '</a>')
+                                $('.training' + i).find('.calves-menu').append('<a class="dropdown-item " href="#">' + e.exerciseName + '</a>')
                             }
 
-                        });
+                            $('.training' + i).find('a').click(function (e) {
+                                e.preventDefault();
+                                $(this).css("background-color", "rgba(131, 176, 244, 0.6)");
+                                let exName = $(this).text();
+                                let muscleGroup = $(this).parent().parent().find($('.btn')).text().trim().toLocaleLowerCase();
+                                let exercise = exercisesByMuscleGroup[muscleGroup].filter(e => e.exerciseName === exName)[0];
+                                let regex = /\,"(.*?).jpg"/gm;
+                                let photoName = regex.exec(exercise['photosInfo'])[1] + '.jpg';
+                                let imageUrl = allUserImages.filter(i => i[0] == photoName)[0][1];
 
+                                $('.training' + i).find('.program-exercises')
+                                    .append('<div class="col-2 client-container">'
+                                        + '<a class="details-link" onclick="removeExerciseFromTraining(this)">'
+                                        + '<div>'
+                                        + '<img src="' + imageUrl + '" class="exerciseThumbnail">'
+                                        + '</div>'
+                                        + '<div class="exercise-data name">'
+                                        + '<p>' + exercise['exerciseName'] + '</p>'
+                                        + '</div>'
+                                        + '<div class="exercise-data muscle-group">'
+                                        + '<p>' + exercise['muscleGroup'] + '</p>'
+                                        + '</div>'
+                                        + '</div>'
+                                        + '</a>');
+
+                            });
+                        });
                     }
+
+                    $('#createProgramBtn').click(function (ev) {
+                        ev.preventDefault();
+                        let program = new Array();
+                        let trainings = $('#trainings').find('.training-block');
+
+                        for (let training of trainings) {
+                            let currenttraining = {};
+                            $(training).find()
+                        }
+
+
+                    });
 
                 }
             });
-
-
         });
-
     });
 });
+
+function removeExerciseFromTraining(identifier) {
+
+    $(identifier).parent().remove();
+    // let exerciseName = $(identifier).find('.name').find('p').text();
+    // let muscleGroup = $(identifier).find('.muscle-group').find('p').text();
+    // console.log(document.getElementsByClassName(muscleGroup));
+    // console.log(document.getElementsByClassName(exerciseName));
+    // let programRow = $(identifier).parent().parent().find(muscleGroup.toLocaleLowerCase).css("background", "white");
+
+    // console.log(programRow);
+
+
+}
 
 app.router.on("#/exercises/all", null, function () {
     $.ajax({
